@@ -1,59 +1,108 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Mini Social Feed API (Laravel + JWT)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A mini social feed RESTful backend inspired by Facebook. Users can **register, login, create posts (text, image, video), like, unlike, comment, and view feed**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tech Stack
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Framework:** Laravel 12  
+- **Authentication:** JWT (`tymon/jwt-auth`)  
+- **Database:** MySQL  
+- **Storage:** Local 
+- **Response Format:** Laravel API Resources/Collections (JSON)  
+- **API Type:** RESTful
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## ⚙️ Setup Instructions
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+### 1️⃣ Clone & Install
+```bash
+git clone https://github.com/<your-username>/mini-social-api.git
+cd mini-social-api
+composer install
+cp .env.example .env
+php artisan jwt:secret
+php artisan migrate
+php artisan storage:link
+php artisan serve
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+# Configure .env
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+APP_NAME="Mini Social Feed API"
+APP_URL=http://localhost:8000
 
-### Premium Partners
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=social_feed_api
+DB_USERNAME=root
+DB_PASSWORD=
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+# Run the App
+php artisan serve
 
-## Contributing
+Open in browser: http://localhost:8000
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+# Authentication
 
-## Code of Conduct
+# Use Bearer Token in headers for all protected routes:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Authorization: Bearer <your_token_here>
 
-## Security Vulnerabilities
+# API Endpoints
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#Feature               #Method          #Endpoint                      #Description
+Register               POST            /api/auth/register              Register new user
+Login	               POST	           /api/auth/login	               Get JWT token
+Profile (Me)	       GET	           /api/auth/me	                   Get current user
+Logout	               POST	           /api/auth/logout	               Logout user
+Create Post	           POST	           /api/posts	           Create post (text + optional media)
+All Posts	           GET	           /api/posts	           Get all posts (latest first)
+View Post	           GET	           /api/posts/{id}	               Get single post
+Delete Post	           DELETE	       /api/posts/{id}	               Delete post (owner only)
+Like Post	           POST	           /api/posts/{id}/like	           Like a post
+Unlike Post	           POST	           /api/posts/{id}/unlike	       Unlike a post
+Comment Post	       POST	           /api/posts/{id}/comment	       Add comment
+Get Comments	       GET	           /api/posts/{id}/comments	       List comments
+Feed	               GET	         /api/feed	    Posts with author, likes, comments, liked status
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Commands Summary
+
+#Purpose	                      #Command
+Migrate DB	                      php artisan migrate  # First setup your .env
+Generate JWT Key	              php artisan jwt:secret
+Storage Link	                  php artisan storage:link
+Clear Cache	                      php artisan config:clear && php artisan cache:clear
+Serve App	                      php artisan serve
+
+
+# Challenges & Assumptions
+
+Media files stored locally under /storage/app/public/posts/
+
+Post deletion restricted to owner only
+
+Feed returns all posts with Post author details	- Like count - Commen count	- Whether the current user liked the post or not
+
+JWT token expiration follows default settings in config/jwt.php
+
+Assumes single MySQL database
+
+
+
+👨‍💻 Author
+
+Suneel Kumar
+Full Stack Web Developer
+📧 suneelkumarsk036@gmail.com
+
+📞 +91-9793581152
+🌐 New Delhi, India
+
+✅ License
+
+MIT License — Free for learning and interviews.  
