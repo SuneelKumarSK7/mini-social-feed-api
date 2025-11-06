@@ -36,7 +36,7 @@ class PostRequest extends FormRequest
     {
         // Throw JSON response instead of HTML redirect
         throw new HttpResponseException(response()->json([
-            'status' => false,
+            'success' => false,
             'errors' => $validator->errors()
         ], 422));
     }

@@ -18,7 +18,7 @@ Route::post('auth/register', [AuthController::class, 'register']);
 Route::post('auth/login', [AuthController::class, 'login']);
 
 // Protected
-Route::group(['middleware' => ['auth:api']], function () {
+Route::group(['middleware' => ['api.auth']], function () {
     Route::get('auth/me', [AuthController::class, 'me']);
     Route::post('auth/logout', [AuthController::class, 'logout']);
 

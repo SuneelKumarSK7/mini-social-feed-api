@@ -12,9 +12,14 @@ class FeedController extends Controller
     {
         $user = $request->user();
 
-        // feed: all posts with author plus counts and whether current user liked the post or not	
-        $posts = Post::with('author')->orderBy('created_at','desc')->paginate(10);
+        // feed: all posts with author plus counts and whether current user liked the post or not
+        $posts = Post::with('author')->orderBy('created_at', 'desc')->paginate(10);
 
-        return PostResource::collection($posts);
+        return response()->json([
+            'success' => true,
+            'message'=>"Feed retrive successfully!",
+            'data' => PostResource::collection($posts),
+            'status_code' => 200
+        ]);
     }
 }

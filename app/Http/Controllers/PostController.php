@@ -21,7 +21,7 @@ class PostController extends Controller
 
 
     // list posts in reverse chronological order
-    public function index(Request $request)
+    public function index()
     {
         $response = $this->postService->index();
         return response()->json($response, $response['status_code'] ?? 200);
@@ -35,16 +35,15 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
+        $response = $this->postService->createPost($request->all(), $request->user());
+        return response()->json($response, $response['status_code']);
 
-        $post = $this->postService->createPost($request->all(), $request->user());
-        return (new PostResource($post))->response()->setStatusCode(201);
-      
     }
 
     public function destroy(Request $request, $id)
     {
         $response = $this->postService->deletePost($request->user()->id, $id);
-        
+
         return response()->json($response, $response['status_code']);
     }
 }

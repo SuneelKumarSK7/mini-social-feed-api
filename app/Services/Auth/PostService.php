@@ -3,10 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Models\Post;
-use App\Models\User;
 use App\Http\Resources\PostResource;
-use App\Http\Resources\UserResource;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class PostService
@@ -16,10 +13,25 @@ class PostService
     {
         $posts = Post::with('author')->orderBy('created_at', 'desc')->paginate(10);
         if ($posts->isEmpty()) {
-            return ['success' => false, 'message' => 'No posts found', 'status_code' => 404];
+            return [
+                'success' => false,
+                'status_code' => 404,
+                'message' => 'No posts found',
+                'data' => []
+            ];
         }
 
-        return PostResource::collection($posts);
+        return [
+            'success' => true,
+            'status_code' => 200,
+            'data' => PostResource::collection($posts),
+            'meta' => [
+                'current_page' => $posts->currentPage(),
+                'last_page' => $posts->lastPage(),
+                'per_page' => $posts->perPage(),
+                'total' => $posts->total(),
+            ]
+        ];
     }
 
     public function show($id)
@@ -55,8 +67,12 @@ class PostService
         ]);
 
         $post->load('author');
-
-        return $post;
+        return [
+            'success' => true,
+            'message' => 'Post created successfully!',
+            'status_code' => 201,
+            'post' => new PostResource($post),
+        ];
     }
 
     // Delete post

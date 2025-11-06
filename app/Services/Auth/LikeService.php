@@ -2,8 +2,6 @@
 
 namespace App\Services\Auth;
 use App\Models\Post;
-use App\Models\User;
-use App\Http\Resources\UserResource;
 
 class LikeService
 {
@@ -32,7 +30,7 @@ class LikeService
             'message' => 'Liked',
             'status_code' => 200,
         ];
-      
+
     }
 
     // Unlike a post

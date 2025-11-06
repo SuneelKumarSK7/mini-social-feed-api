@@ -3,8 +3,6 @@
 namespace App\Services\Auth;
 
 use App\Models\Post;
-use App\Models\User;
-use App\Http\Resources\UserResource;
 use App\Http\Resources\CommentResource;
 
 use function PHPUnit\Framework\returnSelf;
@@ -24,16 +22,18 @@ class CommentService
         }
 
         $comments = $post->comments()->with('user')->orderBy('created_at', 'asc')->get();
-        if($comments->isEmpty()){
+        if ($comments->isEmpty()) {
             return [
                 'success' => false,
                 'message' => 'Comments not found for this post',
                 'status_code' => 404,
             ];
         }
-
-
-        return CommentResource::collection($comments);
+        return [
+            'success' => true,
+            'status_code' => 200,
+            'data' => CommentResource::collection($comments),
+        ];
     }
 
     // Add new comments
